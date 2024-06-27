@@ -1,17 +1,18 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 
 interface IProps {
     title: string,
-    image: string,
-    description: string,
+    image: string
 }
 
-const GeneralStructure: FC<IProps> = ({title,image,description}) => {
+type IState<T> = T & {children?: ReactNode};
+
+const GeneralStructure: FC<IState<IProps>> = ({title,image, children}) => {
     return (
         <div>
             <h2>{title}</h2>
             <img src={image} alt={title}/>
-            <p>{description}</p>
+            <p>{children}</p>
         </div>
     );
 };
