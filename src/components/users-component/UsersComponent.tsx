@@ -1,21 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import UserComponent from "../user-component/UserComponent";
+import {IUser} from "../../models/IUser";
+import {getAllUsers, getPostOUserById} from "../../services/api.service";
 
 const UsersComponent = () => {
 
-    const [users, setUsers] = useState<any[]>([])
+    const [users, setUsers] = useState<IUser[]>([])
 
     useEffect(() => {
-        fetch('https://dummyjson.com/users')
-            .then(value => value.json())
-            .then(value => {
-                setUsers(value.users);// пока сдесь не добавил через точку users, то писало что users.map is not a function
-            });
+       getAllUsers().then(value => {
+           setUsers(value.users);
+       });
     }, []);
+
+    const getPosts = (id: number) => {
+        getPostOUserById(id).then(posts => console.log(posts));
+    }
 
     return (
         <div>
-            {users.map((user) => <UserComponent user={user} />)}
+            <hr/>
+            <div>
+                {users.map((user) => <UserComponent key={user.id} user={user} getPosts = {getPosts}/>)}
+            </div>
+            <hr/>
         </div>
     );
 };
