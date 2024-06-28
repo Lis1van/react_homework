@@ -1,11 +1,17 @@
-
-const getAllUsers = () => {
-    return fetch('https://dummyjson.com/users')
-        .then(value => value.json())
+import axios from "axios";
+let axiosInstance = axios.create({
+    baseURL: "https://dummyjson.com",
+});
+axiosInstance.interceptors.request.use(request => {
+    request.headers.set("Content-Type", "application/json");
+    return request;
+})
+const getAllUsers = async () => {
+    return await axiosInstance.get('/users').then((response) => {return response.data});
 }
-const getPostOUserById = (id: number) => {
-    return fetch('https://dummyjson.com/users/'+id+'/posts')
-        .then(value => value.json())
-}
 
+let getPostOUserById = async (id: number) => {
+    return await axiosInstance.get('/users/'+id+'/posts').then((response) => {return response.data})
+}
 export {getAllUsers, getPostOUserById};
+
