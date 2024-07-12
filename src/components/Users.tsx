@@ -1,4 +1,6 @@
+// src/components/Users.tsx
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getUsers } from '../api/usersApi';
 import { User } from '../interfaces/User';
 
@@ -10,7 +12,11 @@ const Users: React.FC = () => {
     useEffect(() => {
         getUsers()
             .then((data) => {
-                setUsers(data);
+                if (Array.isArray(data)) {
+                    setUsers(data);
+                } else {
+                    setError('Invalid data format');
+                }
                 setLoading(false);
             })
             .catch((error) => {
@@ -28,7 +34,8 @@ const Users: React.FC = () => {
             <ul>
                 {users.map(user => (
                     <li key={user.id}>
-                        {user.firstname} ({user.lastname}) - {user.email}
+                        `{user.firstname} ({user.lastname}): - {user.email}: -`
+                        <Link to={`/users/${user.id}`}>View Posts</Link>
                     </li>
                 ))}
             </ul>
@@ -37,3 +44,6 @@ const Users: React.FC = () => {
 };
 
 export default Users;
+
+
+
